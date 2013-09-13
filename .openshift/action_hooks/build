@@ -4,6 +4,10 @@
 # before the deploy step.  This script gets executed directly, so it
 # could be python, php, ruby, etc. 
 
+# FIXME: (Only for testing..)
+# Make sure we install PEARs prior to action_hook
+$OPENSHIFT_PHP_DIR/bin/control build
+
 set -e
 
 #
