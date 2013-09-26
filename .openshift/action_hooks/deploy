@@ -6,6 +6,8 @@
 
 set -e
 
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
 DRUPAL_SITE_DIR=${OPENSHIFT_DATA_DIR}sites
 DRUPAL_PRIVATE_DIR=${OPENSHIFT_DATA_DIR}private
 DRUPAL_SETTINGS=${DRUPAL_SITE_DIR}/default/settings.php
@@ -105,14 +107,15 @@ END
   chmod u-w ${DRUPAL_SETTINGS} ${DRUPAL_SITE_DIR}/default
 
   popd
-  echo
-  echo "Drupal is now configured"
-  echo
-  echo "===================================================="
-  echo "  Drupal-Admin login: admin"
-  echo "  Drupal-Admin password: openshift_changeme"
-  echo "  Don't forget to change your drupal admin password!"
-  echo "===================================================="
+  client_result
+  client_result "Drupal is now configured"
+  client_result
+  client_result "===================================================="
+  client_result "  Drupal-Admin login: admin"
+  client_result "  Drupal-Admin password: openshift_changeme"
+  client_result "  Don't forget to change your drupal admin password!"
+  client_result "===================================================="
+
 else
   echo "Drupal is already configured.  Delete settings.php to rerun setup"
 fi
