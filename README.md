@@ -67,9 +67,12 @@ That's it, you can now checkout your application at:
 
 Default Credentials
 -------------------
-<table>
-<tr><td>Default Admin Username</td><td>admin</td></tr>
-<tr><td>Default Admin Password</td><td>openshift_changeme</td></tr>
+The default Drupal credentials are generated on the pre_build hook when
+the application is created. If you missed the username/password pair,
+you can check the `${OPENSHIFT_DATA_DIR}CREDENTIALS` file in your gear.
+You can run the following command to see it's contents quickly:
+
+    rhc ssh drupal 'cat ${OPENSHIFT_DATA_DIR}CREDENTIALS'
 </table>
 
 Updates

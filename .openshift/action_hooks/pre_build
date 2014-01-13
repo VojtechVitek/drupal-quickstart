@@ -4,4 +4,24 @@
 # before the build step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
 
-echo "Drupal application credentials\n\tuser: admin\n\tpassword: openshift_changeme\n" > ${OPENSHIFT_DATA_DIR}/CREDENTIALS
+set -e
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+# Generate default Drupal credentials
+if [ ! -f ${OPENSHIFT_DATA_DIR}CREDENTIALS ]; then
+  client_message "Generating default Drupal credentials:"
+
+  DRUPAL_USER="admin"
+  DRUPAL_PASSWORD=$(generate_password | tr -d '\n')
+
+  echo -n $DRUPAL_USER > ${OPENSHIFT_DATA_DIR}DEFAULT_USER
+  echo -n $DRUPAL_PASSWORD > ${OPENSHIFT_DATA_DIR}DEFAULT_PASSWORD
+  echo -e "Default Drupal credentials\n\tuser: $DRUPAL_USER\n\tpassword: $DRUPAL_PASSWORD\n" > ${OPENSHIFT_DATA_DIR}CREDENTIALS
+  chmod -w ${OPENSHIFT_DATA_DIR}CREDENTIALS ${OPENSHIFT_DATA_DIR}DEFAULT_USER ${OPENSHIFT_DATA_DIR}DEFAULT_PASSWORD
+
+  client_message "===================================================="
+  client_message "  login: $DRUPAL_USER"
+  client_message "  password: $DRUPAL_PASSWORD"
+  client_message "===================================================="
+fi
