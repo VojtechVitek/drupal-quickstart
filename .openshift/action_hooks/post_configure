@@ -1,0 +1,17 @@
+#!/bin/bash
+# This is a simple post configure hook executed after your application 
+# is deployed and started.  This script gets executed directly, so 
+# it could be python, php, ruby, etc.
+
+set -e
+
+DRUPAL_USER=$(cat ${OPENSHIFT_DATA_DIR}DEFAULT_USER)
+DRUPAL_PASSWORD=$(cat ${OPENSHIFT_DATA_DIR}DEFAULT_PASSWORD)
+
+client_message "post_configure"
+client_message "Drupal is now configured"
+client_message
+client_message "===================================================="
+client_message "  Default Drupal login: $DRUPAL_USER"
+client_message "  Default Drupal password: $DRUPAL_PASSWORD"
+client_message "===================================================="

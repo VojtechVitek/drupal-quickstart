@@ -4,4 +4,39 @@
 # before the build step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
 
-echo "Drupal application credentials\n\tuser: admin\n\tpassword: openshift_changeme\n" > ${OPENSHIFT_DATA_DIR}/CREDENTIALS
+set -e
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+# Generate default Drupal user
+if [ ! -f ${OPENSHIFT_DATA_DIR}/DEFAULT_USER ]; then
+  echo -n "admin" > ${OPENSHIFT_DATA_DIR}DEFAULT_USER
+  chmod -w ${OPENSHIFT_DATA_DIR}DEFAULT_USER
+fi
+
+# Generate default Drupal password
+if [ ! -f ${OPENSHIFT_DATA_DIR}/DEFAULT_PASSWORD ]; then
+  generate_password > ${OPENSHIFT_DATA_DIR}DEFAULT_PASSWORD
+  chmod -w ${OPENSHIFT_DATA_DIR}DEFAULT_PASSWORD
+fi
+  
+# Generate human-readable Drupal credentials file
+if [ ! -f ${OPENSHIFT_DATA_DIR}/CREDENTIALS ]; then
+  DRUPAL_USER=$(cat ${OPENSHIFT_DATA_DIR}DEFAULT_USER)
+  DRUPAL_PASSWORD=$(cat ${OPENSHIFT_DATA_DIR}DEFAULT_PASSWORD)
+  echo "Default Drupal credentials\n\tuser: $DRUPAL_USER\n\tpassword: $DRUPAL_PASSWORD\n" > ${OPENSHIFT_DATA_DIR}/CREDENTIALS
+  chmod -w ${OPENSHIFT_DATA_DIR}/CREDENTIALS
+fi
+
+set -e
+
+DRUPAL_USER=$(cat ${OPENSHIFT_DATA_DIR}DEFAULT_USER)
+DRUPAL_PASSWORD=$(cat ${OPENSHIFT_DATA_DIR}DEFAULT_PASSWORD)
+
+client_message "pre_build"
+client_message "Drupal is now configured"
+client_message
+client_message "===================================================="
+client_message "  Default Drupal login: $DRUPAL_USER"
+client_message "  Default Drupal password: $DRUPAL_PASSWORD"
+client_message "===================================================="
